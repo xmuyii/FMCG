@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwiftPantry | Everyday Essentials Delivered</title>
+    <style>
+        /* --- General Reset & Styles --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f8f9fa; color: #333; line-height: 1.6; }
+        a { text-decoration: none; color: inherit; }
+
+        /* --- Announcement Bar --- */
+        .top-bar { background: #1b4332; color: #fff; text-align: center; padding: 8px; font-size: 0.85rem; font-weight: 600; }
+
+        /* --- Navigation --- */
+        header { background: #fff; border-bottom: 1px solid #e9ecef; position: sticky; top: 0; z-index: 100; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 15px 20px; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: #2d6a4f; }
+        .logo span { color: #52b788; }
+        .nav-links { display: flex; list-style: none; gap: 20px; font-weight: 500; }
+        .nav-links a:hover { color: #2d6a4f; }
+        .nav-actions { display: flex; gap: 15px; align-items: center; }
+        .btn-cart { background: #2d6a4f; color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600; }
+
+        /* --- Hero Section --- */
+        .hero { background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1200&q=80') center/cover; color: white; text-align: center; padding: 100px 20px; }
+        .hero h1 { font-size: 3rem; margin-bottom: 15px; }
+        .hero p { font-size: 1.2rem; max-width: 600px; margin: 0 auto 25px auto; }
+        .cta-btn { background: #52b788; color: white; padding: 12px 30px; font-size: 1rem; border-radius: 5px; font-weight: bold; display: inline-block; transition: background 0.3s; }
+        .cta-btn:hover { background: #40916c; }
+
+        /* --- Layout Container --- */
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        .section-title { text-align: center; font-size: 2rem; margin-bottom: 30px; color: #1b4332; }
+
+        /* --- Categories Grid --- */
+        .categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .category-card { background: white; border-radius: 8px; overflow: hidden; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); padding: 20px; transition: transform 0.2s; }
+        .category-card:hover { transform: translateY(-5px); }
+        .category-card h3 { margin-top: 10px; font-size: 1.1rem; }
+
+        /* --- Best Sellers --- */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; }
+        .product-card { background: white; border-radius: 8px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; }
+        .product-card img { width: 100%; height: 180px; object-fit: contain; margin-bottom: 15px; }
+        .price { font-weight: bold; color: #2d6a4f; font-size: 1.1rem; margin: 8px 0; }
+        .add-btn { width: 100%; background: #e9ecef; color: #333; border: none; padding: 10px; font-weight: 600; border-radius: 5px; cursor: pointer; transition: 0.2s; }
+        .add-btn:hover { background: #2d6a4f; color: white; }
+
+        /* --- Footer --- */
+        footer { background: #081c15; color: white; padding: 40px 20px; margin-top: 60px; text-align: center; }
+        footer p { font-size: 0.9rem; opacity: 0.7; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        ⚡ Express 2-Hour Delivery Available | Free Shipping on Orders Over $35
+    </div>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo">Swift<span>Pantry</span></div>
+            <ul class="nav-links">
+                <li><a href="#">Groceries</a></li>
+                <li><a href="#">Personal Care</a></li>
+                <li><a href="#">Household</a></li>
+                <li><a href="#">Subscribe & Save</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="#" class="btn-cart">Cart (0)</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Fresh Goods, Fast Delivery.</h1>
+        <p>Your everyday essentials delivered directly from local producers to your doorstep in hours.</p>
+        <a href="#products" class="cta-btn">Shop Everyday Deals</a>
+    </section>
+
+    <section class="container">
+        <h2 class="section-title">Shop by Category</h2>
+        <div class="categories-grid">
+            <div class="category-card">
+                <div style="font-size: 40px;">🥦</div>
+                <h3>Fresh Produce</h3>
+            </div>
+            <div class="category-card">
+                <div style="font-size: 40px;">🧃</div>
+                <h3>Beverages</h3>
+            </div>
+            <div class="category-card">
+                <div style="font-size: 40px;">🧼</div>
+                <h3>Personal Care</h3>
+            </div>
+            <div class="category-card">
+                <div style="font-size: 40px;">🧻</div>
+                <h3>Household Essentials</h3>
+            </div>
+        </div>
+    </section>
+
+    <section class="container" id="products">
+        <h2 class="section-title">Trending Essentials</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <img src="https://via.placeholder.com/150" alt="Product">
+                <h3>Organic Whole Milk</h3>
+                <div class="price">$3.49</div>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <img src="https://via.placeholder.com/150" alt="Product">
+                <h3>Artisanal Whole Wheat Bread</h3>
+                <div class="price">$2.99</div>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <img src="https://via.placeholder.com/150" alt="Product">
+                <h3>Eco Laundry Detergent</h3>
+                <div class="price">$12.99</div>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <img src="https://via.placeholder.com/150" alt="Product">
+                <h3>Sparkling Spring Water (Pack)</h3>
+                <div class="price">$5.99</div>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 SwiftPantry FMCG Ltd. All rights reserved.</p>
+        <p>Delivering quality everyday items at unbeatable speeds.</p>
+    </footer>
+
+</body>
+</html>

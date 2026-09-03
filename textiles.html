@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApexTextiles B2B | Wholesale Fabrics, Apparel & Accessories</title>
+    <style>
+        /* --- General Reset & Styling --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        body { background-color: #f4f6f8; color: #1e293b; line-height: 1.5; }
+        a { text-decoration: none; color: inherit; }
+
+        /* --- Announcement Bar --- */
+        .top-bar { background: #0f172a; color: #94a3b8; text-align: center; padding: 8px 15px; font-size: 0.85rem; font-weight: 500; }
+        .top-bar span { color: #38bdf8; font-weight: 600; }
+
+        /* --- Navigation --- */
+        header { background: #ffffff; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; max-width: 1280px; margin: 0 auto; padding: 15px 20px; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: #0f172a; letter-spacing: -0.5px; }
+        .logo span { color: #2563eb; }
+        .nav-links { display: flex; list-style: none; gap: 24px; font-weight: 600; font-size: 0.95rem; }
+        .nav-links a:hover { color: #2563eb; }
+        .nav-actions { display: flex; gap: 12px; align-items: center; }
+        .btn-outline { border: 1px solid #cbd5e1; color: #334155; padding: 9px 18px; border-radius: 6px; font-weight: 600; font-size: 0.9rem; }
+        .btn-primary { background: #2563eb; color: #ffffff; padding: 9px 18px; border-radius: 6px; font-weight: 600; font-size: 0.9rem; transition: 0.2s; }
+        .btn-primary:hover { background: #1d4ed8; }
+
+        /* --- B2B Hero Section --- */
+        .hero { background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.85)), url('https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=1400&q=80') center/cover; color: white; padding: 90px 20px; text-align: center; }
+        .hero h1 { font-size: 3.2rem; font-weight: 800; margin-bottom: 20px; letter-spacing: -1px; }
+        .hero p { font-size: 1.25rem; color: #cbd5e1; max-width: 720px; margin: 0 auto 30px auto; }
+        .hero-cta { display: flex; gap: 15px; justify-content: center; }
+
+        /* --- Trust / Metric Bar --- */
+        .trust-bar { background: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 25px 20px; }
+        .trust-grid { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; text-align: center; }
+        .trust-item h4 { font-size: 1.2rem; color: #0f172a; font-weight: 700; }
+        .trust-item p { font-size: 0.85rem; color: #64748b; }
+
+        /* --- Main Layout --- */
+        .container { max-width: 1280px; margin: 50px auto; padding: 0 20px; }
+        .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px; }
+        .section-title { font-size: 1.8rem; font-weight: 800; color: #0f172a; }
+        .subtitle { font-size: 0.95rem; color: #64748b; margin-top: 4px; }
+
+        /* --- Categories Grid --- */
+        .categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+        .cat-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 25px; transition: all 0.2s; }
+        .cat-card:hover { border-color: #2563eb; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
+        .cat-card .icon { font-size: 2.2rem; margin-bottom: 12px; }
+        .cat-card h3 { font-size: 1.2rem; color: #0f172a; font-weight: 700; margin-bottom: 8px; }
+        .cat-card p { font-size: 0.88rem; color: #64748b; margin-bottom: 15px; }
+        .cat-card a { font-size: 0.88rem; color: #2563eb; font-weight: 700; }
+
+        /* --- Product Catalog & Volume Pricing --- */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .product-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between; }
+        .badge { display: inline-block; background: #e0f2fe; color: #0369a1; font-size: 0.75rem; font-weight: 700; padding: 4px 8px; border-radius: 4px; width: fit-content; margin-bottom: 10px; }
+        .product-title { font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 6px; }
+        .spec-list { font-size: 0.85rem; color: #64748b; list-style: none; margin-bottom: 15px; }
+        .spec-list li { margin-bottom: 4px; }
+        
+        /* Pricing Table within Card */
+        .tier-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 0.8rem; background: #f8fafc; border-radius: 4px; overflow: hidden; }
+        .tier-table th, .tier-table td { padding: 6px 10px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        .tier-table th { background: #f1f5f9; font-weight: 600; color: #475569; }
+
+        .card-actions { display: flex; gap: 8px; }
+        .btn-sm { flex: 1; text-align: center; padding: 8px 0; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+        .btn-sample { background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; }
+        .btn-quote { background: #0f172a; color: #ffffff; border: none; }
+
+        /* --- Custom Manufacturing Banner --- */
+        .oem-banner { background: #1e293b; color: white; border-radius: 12px; padding: 40px; display: flex; justify-content: space-between; align-items: center; margin-top: 60px; }
+        .oem-content { max-width: 600px; }
+        .oem-content h2 { font-size: 2rem; margin-bottom: 10px; }
+        .oem-content p { color: #94a3b8; margin-bottom: 20px; }
+
+        /* --- Footer --- */
+        footer { background: #0f172a; color: #94a3b8; padding: 50px 20px; margin-top: 80px; font-size: 0.9rem; }
+        .footer-grid { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
+        .footer-col h5 { color: #ffffff; font-size: 1rem; margin-bottom: 15px; }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 8px; }
+        .copyright { text-align: center; max-width: 1280px; margin: 40px auto 0 auto; padding-top: 20px; border-top: 1px solid #334155; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        🏭 Direct Factory Wholesale | 📜 OEKO-TEX & GOTS Certified Textiles | <span>Low Minimum Orders Available</span>
+    </div>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo">Apex<span>Textiles</span> <small style="font-size: 0.6rem; color:#64748b; vertical-align: super;">B2B</small></div>
+            <ul class="nav-links">
+                <li><a href="#">Raw Fabrics</a></li>
+                <li><a href="#">Ready Apparel</a></li>
+                <li><a href="#">Accessories & Trims</a></li>
+                <li><a href="#">Custom OEM/ODM</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="#" class="btn-outline">Order Swatch Kit</a>
+                <a href="#" class="btn-primary">Request RFQ</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Global Bulk Supply for Apparel & Textiles</h1>
+        <p>Premium raw fabrics, manufactured garments, and custom trim accessories. Scalable production with transparent volume pricing for global brands and buyers.</p>
+        <div class="hero-cta">
+            <a href="#products" class="btn-primary" style="padding: 12px 28px; font-size: 1rem;">Browse Bulk Inventory</a>
+            <a href="#" class="btn-outline" style="color: white; border-color: #cbd5e1; padding: 12px 28px; font-size: 1rem;">Request Custom Quotation</a>
+        </div>
+    </section>
+
+    <section class="trust-bar">
+        <div class="trust-grid">
+            <div class="trust-item">
+                <h4>500 Roll / Piece MOQs</h4>
+                <p>Low barrier entry for emerging brands</p>
+            </div>
+            <div class="trust-item">
+                <h4>ISO 9001 & GOTS</h4>
+                <p>100% Quality audited mills</p>
+            </div>
+            <div class="trust-item">
+                <h4>14-Day Sample Delivery</h4>
+                <p>Rapid prototyping & strike-offs</p>
+            </div>
+            <div class="trust-item">
+                <h4>DDP Freight Worldwide</h4>
+                <p>Customs clearance handled</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="container">
+        <div class="section-header">
+            <div>
+                <h2 class="section-title">Product Categories</h2>
+                <p class="subtitle">Source directly by material classification or finished products.</p>
+            </div>
+        </div>
+        <div class="categories-grid">
+            <div class="cat-card">
+                <div class="icon">🧶</div>
+                <h3>Raw & Knitted Fabrics</h3>
+                <p>Cotton jersey, linen, denim, performance synthetics, and eco-friendly bamboo blends.</p>
+                <a href="#">Explore Fabrics &rarr;</a>
+            </div>
+            <div class="cat-card">
+                <div class="icon">👕</div>
+                <h3>Blank & Ready Apparel</h3>
+                <p>Bulk t-shirts, hoodies, activewear, and outerwear ready for screen printing/embroidery.</p>
+                <a href="#">Explore Apparel &rarr;</a>
+            </div>
+            <div class="cat-card">
+                <div class="icon">🧵</div>
+                <h3>Trims & Accessories</h3>
+                <p>Zippers, buttons, woven labels, hardware, and custom branded packaging materials.</p>
+                <a href="#">Explore Accessories &rarr;</a>
+            </div>
+            <div class="cat-card">
+                <div class="icon">🌱</div>
+                <h3>Organic & Recycled</h3>
+                <p>Certified organic cotton, GRS recycled polyester, and sustainable botanical dyes.</p>
+                <a href="#">Explore Sustainable &rarr;</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="container" id="products">
+        <div class="section-header">
+            <div>
+                <h2 class="section-title">Bulk Wholesale Catalog</h2>
+                <p class="subtitle">In-stock materials ready for rapid bulk dispatch.</p>
+            </div>
+        </div>
+
+        <div class="product-grid">
+            
+            <div class="product-card">
+                <div>
+                    <span class="badge">In Stock • MOQ: 100 Meters</span>
+                    <h3 class="product-title">100% Organic Combed Cotton Jersey</h3>
+                    <ul class="spec-list">
+                        <li><strong>Weight:</strong> 180 GSM</li>
+                        <li><strong>Width:</strong> 160 cm</li>
+                        <li><strong>Lead Time:</strong> 3-5 Business Days</li>
+                    </ul>
+
+                    <table class="tier-table">
+                        <tr><th>Quantity</th><th>Price / Meter</th></tr>
+                        <tr><td>100 - 499 m</td><td>$4.20</td></tr>
+                        <tr><td>500 - 1,999 m</td><td>$3.60</td></tr>
+                        <tr><td>2,000+ m</td><td>$2.95</td></tr>
+                    </table>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-sm btn-sample">Order Sample</button>
+                    <button class="btn-sm btn-quote">Inquire Bulk</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div>
+                    <span class="badge">Custom Order • MOQ: 300 Pcs</span>
+                    <h3 class="product-title">Heavyweight French Terry Hoodies</h3>
+                    <ul class="spec-list">
+                        <li><strong>Material:</strong> 400 GSM Cotton/Poly</li>
+                        <li><strong>Features:</strong> Pre-shrunk, Custom Tags</li>
+                        <li><strong>Lead Time:</strong> 12-18 Business Days</li>
+                    </ul>
+
+                    <table class="tier-table">
+                        <tr><th>Quantity</th><th>Price / Unit</th></tr>
+                        <tr><td>300 - 999 pcs</td><td>$14.50</td></tr>
+                        <tr><td>1,000 - 4,999 pcs</td><td>$11.80</td></tr>
+                        <tr><td>5,000+ pcs</td><td>$9.20</td></tr>
+                    </table>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-sm btn-sample">Order Sample</button>
+                    <button class="btn-sm btn-quote">Inquire Bulk</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div>
+                    <span class="badge">In Stock • MOQ: 1,000 Pcs</span>
+                    <h3 class="product-title">Matte Metal YKK-Type Zippers (No. 5)</h3>
+                    <ul class="spec-list">
+                        <li><strong>Type:</strong> Open-End Auto Lock</li>
+                        <li><strong>Length:</strong> Customizable (20-70cm)</li>
+                        <li><strong>Lead Time:</strong> 5-7 Business Days</li>
+                    </ul>
+
+                    <table class="tier-table">
+                        <tr><th>Quantity</th><th>Price / Unit</th></tr>
+                        <tr><td>1,000 - 4,999 pcs</td><td>$0.65</td></tr>
+                        <tr><td>5,000 - 19,999 pcs</td><td>$0.48</td></tr>
+                        <tr><td>20,000+ pcs</td><td>$0.32</td></tr>
+                    </table>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-sm btn-sample">Order Sample</button>
+                    <button class="btn-sm btn-quote">Inquire Bulk</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="oem-banner">
+            <div class="oem-content">
+                <h2>Need Custom OEM Manufacturing?</h2>
+                <p>We produce fully custom apparel tech packs, dye matching (Pantone TPX), custom weaving, and private-label packaging.</p>
+            </div>
+            <a href="#" class="btn-primary" style="background: #38bdf8; color: #0f172a; white-space: nowrap;">Talk to a Tech Specialist</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h5>ApexTextiles Group</h5>
+                <p style="font-size: 0.85rem; color: #64748b;">Global B2B wholesale platform for fashion brands, textile converters, and garment factories.</p>
+            </div>
+            <div class="footer-col">
+                <h5>Sourcing</h5>
+                <ul>
+                    <li><a href="#">Fabrics by GSM</a></li>
+                    <li><a href="#">Sustainable Materials</a></li>
+                    <li><a href="#">Apparel Blanks</a></li>
+                    <li><a href="#">Hardware & Trims</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h5>Services</h5>
+                <ul>
+                    <li><a href="#">Custom Dyeing (Lab Dips)</a></li>
+                    <li><a href="#">Cut & Sew Manufacturing</a></li>
+                    <li><a href="#">Quality Inspection (AQL 2.5)</a></li>
+                    <li><a href="#">Freight & Logistics</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h5>Compliance & Legal</h5>
+                <ul>
+                    <li><a href="#">Certifications & Audits</a></li>
+                    <li><a href="#">Terms of Wholesale Supply</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2026 ApexTextiles Wholesale Ltd. All rights reserved.
+        </div>
+    </footer>
+
+</body>
+</html>
