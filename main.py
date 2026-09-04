@@ -42,6 +42,7 @@ from datetime import datetime, timezone
 import requests
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
 from PIL import Image, ImageOps
 from supabase import Client, create_client
 
@@ -386,3 +387,10 @@ async def webhook(request: Request):
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+
+
+# Serve the buyer-facing web app (webapp/index.html and its assets) at "/".
+# This MUST be the last route registered -- Starlette matches routes in the
+# order they're added, so /webhook and /health above still take priority
+# over this catch-all mount.
+app.mount("/", StaticFiles(directory="webapp", html=True), name="webapp")

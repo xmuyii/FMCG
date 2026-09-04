@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ọjà — buy from your local market</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500;700;900&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#22303d;
+    --paper:#f0e9d8;
+    --paper-soft:#f7f2e6;
+    --indigo:#28425f;
+    --indigo-deep:#1b2e42;
+    --ochre:#c9852e;
+    --clay:#a8472e;
+    --leaf:#3f7d52;
+    --leaf-deep:#2f6140;
+    --line:#d9cba3;
+    --flags: var(--indigo), var(--ochre), var(--clay), var(--leaf-deep);
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    line-height:1.5;
+  }
+  h1,h2,h3,.slab{ font-family:'Roboto Slab', serif; }
+
+  a{ color:inherit; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  :focus-visible{
+    outline:3px solid var(--indigo);
+    outline-offset:2px;
+  }
+
+  /* ---------- bunting ---------- */
+  .bunting{
+    display:flex;
+    height:26px;
+    border-top:3px solid var(--ink);
+    overflow:hidden;
+  }
+  .flag{
+    flex:1 0 34px;
+    height:22px;
+    margin-top:-2px;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+  }
+
+  /* ---------- header ---------- */
+  header{
+    background:var(--indigo);
+    color:var(--paper-soft);
+    padding:22px 20px 26px;
+  }
+  .header-inner{
+    max-width:1100px;
+    margin:0 auto;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:baseline;
+    gap:8px 20px;
+  }
+  .brand{
+    font-size:1.7rem;
+    font-weight:900;
+    letter-spacing:0.01em;
+  }
+  .tagline{
+    color:#cfd9e4;
+    font-size:0.95rem;
+    flex:1 1 240px;
+  }
+  .search-row{
+    max-width:1100px;
+    margin:18px auto 0;
+  }
+  .search-input{
+    width:100%;
+    padding:13px 16px;
+    font-size:1rem;
+    border:2px solid var(--ink);
+    background:var(--paper-soft);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+  }
+  .search-input::placeholder{ color:#6b6250; }
+
+  /* ---------- category pennants ---------- */
+  .categories{
+    max-width:1100px;
+    margin:16px auto 0;
+    padding:0 0 4px;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .pennant{
+    border:none;
+    background:var(--indigo-deep);
+    color:var(--paper-soft);
+    font-family:'Work Sans', sans-serif;
+    font-weight:600;
+    font-size:0.85rem;
+    padding:8px 16px 12px;
+    clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%);
+  }
+  .pennant[aria-pressed="true"]{
+    background:var(--ochre);
+    color:var(--indigo-deep);
+  }
+
+  /* ---------- main / grid ---------- */
+  main{
+    max-width:1100px;
+    margin:28px auto 60px;
+    padding:0 20px;
+  }
+  .result-count{
+    margin:0 0 16px;
+    color:#5a5142;
+    font-size:0.9rem;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
+    gap:22px;
+  }
+
+  .card{
+    background:var(--paper-soft);
+    border:2px solid var(--ink);
+    display:flex;
+    flex-direction:column;
+    text-align:left;
+    padding:0;
+    overflow:visible;
+  }
+  .card-img-wrap{
+    position:relative;
+    aspect-ratio:1/1;
+    background:#ddd3b8;
+    overflow:hidden;
+    border-bottom:2px solid var(--ink);
+  }
+  .card-img-wrap img{
+    width:100%; height:100%; object-fit:cover; display:block;
+  }
+  .price-tag{
+    position:absolute;
+    top:10px;
+    right:-6px;
+    background:var(--ochre);
+    color:var(--indigo-deep);
+    font-family:'Roboto Slab', serif;
+    font-weight:700;
+    font-size:0.95rem;
+    padding:6px 14px 6px 18px;
+    clip-path: polygon(10px 0, 100% 0, 100% 100%, 10px 100%, 0 50%);
+  }
+  .card-body{
+    padding:14px 16px 16px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    flex:1;
+  }
+  .card-item{
+    font-size:1.05rem;
+    font-weight:700;
+    margin:0;
+  }
+  .card-meta{
+    color:#5a5142;
+    font-size:0.85rem;
+    margin:0;
+  }
+  .card-cta{
+    margin-top:auto;
+    padding-top:10px;
+  }
+
+  .btn-whatsapp{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    width:100%;
+    background:var(--leaf);
+    color:#fff;
+    border:2px solid var(--leaf-deep);
+    font-weight:600;
+    font-size:0.9rem;
+    padding:10px 12px;
+    text-decoration:none;
+  }
+  .btn-whatsapp:hover{ background:var(--leaf-deep); }
+
+  /* ---------- empty / error states ---------- */
+  .state{
+    border:2px dashed var(--line);
+    padding:40px 24px;
+    text-align:center;
+    color:#5a5142;
+  }
+  .state h2{ margin:0 0 8px; color:var(--ink); }
+  .state p{ margin:0; }
+
+  /* ---------- detail overlay ---------- */
+  .overlay{
+    position:fixed; inset:0;
+    background:rgba(20,26,32,0.55);
+    display:none;
+    align-items:flex-start;
+    justify-content:center;
+    padding:24px 16px;
+    overflow-y:auto;
+    z-index:50;
+  }
+  .overlay.open{ display:flex; }
+  .detail{
+    background:var(--paper-soft);
+    border:2px solid var(--ink);
+    max-width:620px;
+    width:100%;
+    margin-top:20px;
+  }
+  .detail-close{
+    display:flex;
+    justify-content:flex-end;
+    padding:10px 10px 0;
+  }
+  .detail-close button{
+    background:none;
+    border:2px solid var(--ink);
+    color:var(--ink);
+    font-size:0.85rem;
+    font-weight:600;
+    padding:6px 12px;
+  }
+  .detail-img{
+    width:100%;
+    aspect-ratio:1/1;
+    background:#ddd3b8;
+    border-top:2px solid var(--ink);
+    border-bottom:2px solid var(--ink);
+    overflow:hidden;
+  }
+  .detail-img img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .detail-body{ padding:20px 22px 26px; display:flex; flex-direction:column; gap:14px; }
+  .detail-title-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:12px;
+  }
+  .detail-title{ font-size:1.4rem; margin:0; }
+  .detail-id{ color:#8a8067; font-size:0.85rem; white-space:nowrap; }
+  .detail-price{
+    font-family:'Roboto Slab', serif;
+    font-weight:900;
+    font-size:1.6rem;
+    color:var(--indigo);
+  }
+  .detail-meta{ color:#5a5142; font-size:0.95rem; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bunting" id="bunting"></div>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">Ọjà</div>
+    <div class="tagline">Buy from your local market — chat and pay however you already do.</div>
+  </div>
+  <div class="search-row">
+    <input class="search-input" id="searchInput" type="search" placeholder="Search for rice, tomatoes, cement, anything…" aria-label="Search listings">
+  </div>
+  <div class="categories" id="categories" role="group" aria-label="Filter by category"></div>
+</header>
+
+<main>
+  <p class="result-count" id="resultCount"></p>
+  <div class="grid" id="grid"></div>
+</main>
+
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+  <div class="detail">
+    <div class="detail-close"><button id="closeDetail">Close</button></div>
+    <div class="detail-img"><img id="detailImg" src="" alt=""></div>
+    <div class="detail-body">
+      <div class="detail-title-row">
+        <h2 class="detail-title" id="detailTitle"></h2>
+        <span class="detail-id" id="detailId"></span>
+      </div>
+      <div class="detail-price" id="detailPrice"></div>
+      <div class="detail-meta" id="detailMeta"></div>
+      <a class="btn-whatsapp" id="detailWhatsapp" href="#" target="_blank" rel="noopener">Chat on WhatsApp</a>
+    </div>
+  </div>
+</div>
+
+<script>
+// ---------------------------------------------------------------------
+// CONFIG — fill these in before deploying.
+// ---------------------------------------------------------------------
+const CONFIG = {
+  SUPABASE_URL: "https://YOUR-PROJECT.supabase.co",
+  SUPABASE_ANON_KEY: "YOUR-ANON-PUBLIC-KEY",   // safe to expose client-side; RLS restricts it to active listings only (see schema.sql)
+  MIDDLEMAN_PHONE: "234XXXXXXXXXX",             // the WhatsApp number all "Chat" buttons message
+  DEMO_MODE: true                                // true = use sample data below instead of Supabase, for previewing without credentials
+};
+
+const DEMO_LISTINGS = [
+  { id: 12, item: "Rice", quantity: "50kg bag", price: 52000, image_url: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&h=600&fit=crop", category: "Grains", area: "Oja Oba area", created_at: new Date(Date.now() - 2*3600e3).toISOString() },
+  { id: 15, item: "Tomatoes", quantity: "1 basket", price: 18000, image_url: "https://images.unsplash.com/photo-1546094096-0df4bcaaa337?w=600&h=600&fit=crop", category: "Produce", area: "Sabo market", created_at: new Date(Date.now() - 5*3600e3).toISOString() },
+  { id: 18, item: "Cement", quantity: "1 bag (Dangote)", price: 9500, image_url: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=600&h=600&fit=crop", category: "Building", area: "Old garage", created_at: new Date(Date.now() - 26*3600e3).toISOString() },
+  { id: 21, item: "Palm oil", quantity: "4 litres", price: 7500, image_url: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=600&h=600&fit=crop", category: "Grocery", area: "Oja Oba area", created_at: new Date(Date.now() - 40*3600e3).toISOString() },
+  { id: 23, item: "Onions", quantity: "1 bag", price: 32000, image_url: "https://images.unsplash.com/photo-1508747703725-719777637510?w=600&h=600&fit=crop", category: "Produce", area: "Sabo market", created_at: new Date(Date.now() - 3*3600e3).toISOString() },
+  { id: 25, item: "Roofing sheets", quantity: "12 pieces", price: 84000, image_url: "https://images.unsplash.com/photo-1632759145355-8b45b7e93a4a?w=600&h=600&fit=crop", category: "Building", area: "Old garage", created_at: new Date(Date.now() - 8*3600e3).toISOString() }
+];
+
+// ---------------------------------------------------------------------
+// state
+// ---------------------------------------------------------------------
+let allListings = [];
+let activeCategory = "All";
+let searchTerm = "";
+
+const naira = n => "\u20a6" + Number(n).toLocaleString("en-NG");
+
+function timeAgo(iso){
+  const mins = Math.round((Date.now() - new Date(iso)) / 60000);
+  if (mins < 60) return `${mins || 1} min${mins===1?"":"s"} ago`;
+  const hours = Math.round(mins/60);
+  if (hours < 24) return `${hours} hour${hours===1?"":"s"} ago`;
+  const days = Math.round(hours/24);
+  return `${days} day${days===1?"":"s"} ago`;
+}
+
+function whatsappLink(listing){
+  const text = `Hi, I'm interested in listing #${listing.id} - ${listing.item} (${naira(listing.price)})`;
+  return `https://wa.me/${CONFIG.MIDDLEMAN_PHONE}?text=${encodeURIComponent(text)}`;
+}
+
+// ---------------------------------------------------------------------
+// bunting
+// ---------------------------------------------------------------------
+(function renderBunting(){
+  const el = document.getElementById("bunting");
+  const colors = ["var(--indigo)","var(--ochre)","var(--clay)","var(--leaf-deep)"];
+  const count = 40;
+  let html = "";
+  for (let i=0;i<count;i++){
+    html += `<div class="flag" style="background:${colors[i % colors.length]}"></div>`;
+  }
+  el.innerHTML = html;
+})();
+
+// ---------------------------------------------------------------------
+// data loading
+// ---------------------------------------------------------------------
+async function loadListings(){
+  if (CONFIG.DEMO_MODE) return DEMO_LISTINGS;
+
+  const url = `${CONFIG.SUPABASE_URL}/rest/v1/listings?status=eq.active&select=*&order=created_at.desc`;
+  const res = await fetch(url, {
+    headers: {
+      apikey: CONFIG.SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${CONFIG.SUPABASE_ANON_KEY}`
+    }
+  });
+  if (!res.ok) throw new Error(`Supabase request failed: ${res.status}`);
+  return res.json();
+}
+
+// ---------------------------------------------------------------------
+// rendering
+// ---------------------------------------------------------------------
+function renderCategories(){
+  const cats = ["All", ...new Set(allListings.map(l => l.category).filter(Boolean))];
+  const el = document.getElementById("categories");
+  el.innerHTML = cats.map(c =>
+    `<button class="pennant" aria-pressed="${c===activeCategory}" data-cat="${c}">${c}</button>`
+  ).join("");
+  el.querySelectorAll("button").forEach(btn=>{
+    btn.addEventListener("click", () => {
+      activeCategory = btn.dataset.cat;
+      renderCategories();
+      renderGrid();
+    });
+  });
+}
+
+function filteredListings(){
+  return allListings.filter(l=>{
+    const matchesCategory = activeCategory === "All" || l.category === activeCategory;
+    const matchesSearch = !searchTerm || l.item.toLowerCase().includes(searchTerm);
+    return matchesCategory && matchesSearch;
+  });
+}
+
+function renderGrid(){
+  const grid = document.getElementById("grid");
+  const countEl = document.getElementById("resultCount");
+  const results = filteredListings();
+
+  countEl.textContent = `${results.length} item${results.length===1?"":"s"} available`;
+
+  if (results.length === 0){
+    grid.innerHTML = "";
+    countEl.after(emptyStateEl());
+    return;
+  }
+  document.querySelectorAll(".state").forEach(e=>e.remove());
+
+  grid.innerHTML = results.map(l => `
+    <article class="card" tabindex="0" role="button" data-id="${l.id}" aria-label="View ${l.item}, ${naira(l.price)}">
+      <div class="card-img-wrap">
+        <img src="${l.image_url}" alt="${l.item}" loading="lazy">
+        <span class="price-tag">${naira(l.price)}</span>
+      </div>
+      <div class="card-body">
+        <h3 class="card-item">${l.item}</h3>
+        <p class="card-meta">${l.quantity} · ${l.area || "Local market"}</p>
+        <p class="card-meta">${timeAgo(l.created_at)}</p>
+        <div class="card-cta">
+          <a class="btn-whatsapp" href="${whatsappLink(l)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Chat on WhatsApp</a>
+        </div>
+      </div>
+    </article>
+  `).join("");
+
+  grid.querySelectorAll(".card").forEach(card=>{
+    const open = () => openDetail(Number(card.dataset.id));
+    card.addEventListener("click", open);
+    card.addEventListener("keydown", e => { if (e.key==="Enter" || e.key===" "){ e.preventDefault(); open(); } });
+  });
+}
+
+function emptyStateEl(){
+  const div = document.createElement("div");
+  div.className = "state";
+  div.innerHTML = `<h2>Nothing here yet</h2><p>Try a different search, or check another category — new listings come in throughout the day.</p>`;
+  return div;
+}
+
+function errorStateEl(){
+  const div = document.createElement("div");
+  div.className = "state";
+  div.innerHTML = `<h2>Couldn't load listings</h2><p>Check your connection and reload the page. If this keeps happening, the market's still open on WhatsApp.</p>`;
+  return div;
+}
+
+// ---------------------------------------------------------------------
+// detail overlay
+// ---------------------------------------------------------------------
+function openDetail(id){
+  const l = allListings.find(x => x.id === id);
+  if (!l) return;
+  document.getElementById("detailImg").src = l.image_url;
+  document.getElementById("detailImg").alt = l.item;
+  document.getElementById("detailTitle").textContent = l.item;
+  document.getElementById("detailId").textContent = `#${l.id}`;
+  document.getElementById("detailPrice").textContent = naira(l.price);
+  document.getElementById("detailMeta").textContent = `${l.quantity} · ${l.area || "Local market"} · ${timeAgo(l.created_at)}`;
+  document.getElementById("detailWhatsapp").href = whatsappLink(l);
+  document.getElementById("overlay").classList.add("open");
+  history.pushState({ id }, "", `#listing-${id}`);
+}
+
+function closeDetail(){
+  document.getElementById("overlay").classList.remove("open");
+  history.pushState({}, "", location.pathname);
+}
+
+document.getElementById("closeDetail").addEventListener("click", closeDetail);
+document.getElementById("overlay").addEventListener("click", e=>{
+  if (e.target.id === "overlay") closeDetail();
+});
+window.addEventListener("popstate", ()=> {
+  document.getElementById("overlay").classList.remove("open");
+});
+window.addEventListener("keydown", e=>{
+  if (e.key === "Escape") closeDetail();
+});
+
+document.getElementById("searchInput").addEventListener("input", e=>{
+  searchTerm = e.target.value.trim().toLowerCase();
+  renderGrid();
+});
+
+// deep-link support: /#listing-12 opens that item directly
+function openFromHash(){
+  const match = location.hash.match(/^#listing-(\d+)$/);
+  if (match) openDetail(Number(match[1]));
+}
+
+// ---------------------------------------------------------------------
+// boot
+// ---------------------------------------------------------------------
+(async function init(){
+  const grid = document.getElementById("grid");
+  try{
+    allListings = await loadListings();
+    renderCategories();
+    renderGrid();
+    openFromHash();
+  } catch(err){
+    console.error(err);
+    grid.innerHTML = "";
+    document.getElementById("resultCount").textContent = "";
+    grid.after(errorStateEl());
+  }
+})();
+</script>
+
+</body>
+</html>
