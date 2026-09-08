@@ -37,6 +37,7 @@ is a fetchable URL rather than a local file path on GOWA's own container.
 import io
 import os
 import re
+import traceback
 from datetime import datetime, timezone
 
 import requests
@@ -609,75 +610,82 @@ def handle_pending_image_followup(sender_jid: str, message: str, media_url: str,
 @app.post("/webhook")
 async def webhook(request: Request):
     payload = await request.json()
+    print(f"[webhook] received payload: {payload}")
 
-    if payload.get("event") not in (None, "message"):
-        # Ignore non-message events (delivery receipts, presence, etc.)
-        return {"status": "ignored"}
+    try:
+        if payload.get("event") not in (None, "message"):
+            # Ignore non-message events (delivery receipts, presence, etc.)
+            return {"status": "ignored"}
 
-    sender_jid = get_incoming_sender(payload)
-    message = get_incoming_text(payload)
-    media_url = get_incoming_media_url(payload)
+        sender_jid = get_incoming_sender(payload)
+        message = get_incoming_text(payload)
+        media_url = get_incoming_media_url(payload)
 
-    if not sender_jid:
-        return {"status": "ignored"}
+        if not sender_jid:
+            return {"status": "ignored"}
 
-    sell_match = SELL_RE.match(message)
-    edit_match = EDIT_RE.match(message)
-    listing_ref_match = LISTING_REF_RE.search(message)
+        sell_match = SELL_RE.match(message)
+        edit_match = EDIT_RE.match(message)
+        listing_ref_match = LISTING_REF_RE.search(message)
 
-    add_admin_match = ADD_ADMIN_RE.match(message)
-    remove_admin_match = REMOVE_ADMIN_RE.match(message)
-    approve_edit_match = APPROVE_EDIT_RE.match(message)
-    reject_edit_match = REJECT_EDIT_RE.match(message)
-    remove_match = REMOVE_RE.match(message)
-    approve_seller_match = APPROVE_SELLER_RE.match(message)
-    reject_seller_match = REJECT_SELLER_RE.match(message)
+        add_admin_match = ADD_ADMIN_RE.match(message)
+        remove_admin_match = REMOVE_ADMIN_RE.match(message)
+        approve_edit_match = APPROVE_EDIT_RE.match(message)
+        reject_edit_match = REJECT_EDIT_RE.match(message)
+        remove_match = REMOVE_RE.match(message)
+        approve_seller_match = APPROVE_SELLER_RE.match(message)
+        reject_seller_match = REJECT_SELLER_RE.match(message)
 
-    seller_for_application = None
-    if APPLICATION_HINT_RE.search(message):
-        seller_for_application = get_seller_by_phone(phone_from_jid(sender_jid))
+        seller_for_application = None
+        if APPLICATION_HINT_RE.search(message):
+            seller_for_application = get_seller_by_phone(phone_from_jid(sender_jid))
 
-    if add_admin_match:
-        reply_text = handle_add_admin_command(sender_jid, add_admin_match.group(1), add_admin_match.group(2))
-    elif remove_admin_match:
-        reply_text = handle_remove_admin_command(sender_jid, remove_admin_match.group(1))
-    elif ADMINS_RE.match(message):
-        reply_text = handle_list_admins_command(sender_jid)
-    elif approve_edit_match:
-        reply_text = handle_approve_edit_command(sender_jid, int(approve_edit_match.group(1)))
-    elif reject_edit_match:
-        reply_text = handle_reject_edit_command(sender_jid, int(reject_edit_match.group(1)))
-    elif remove_match:
-        reply_text = handle_remove_command(sender_jid, int(remove_match.group(1)))
-    elif approve_seller_match:
-        reply_text = handle_approve_seller_command(sender_jid, approve_seller_match.group(1))
-    elif reject_seller_match:
-        reply_text = handle_reject_seller_command(sender_jid, reject_seller_match.group(1))
-    elif APPLICATIONS_RE.match(message):
-        reply_text = handle_applications_command(sender_jid)
-    elif HELP_RE.match(message):
-        reply_text = HELP_TEXT
-    elif seller_for_application and seller_for_application["application_status"] in ("awaiting_form", "rejected"):
-        reply_text = handle_application_submission(sender_jid, message)
-    elif sell_match:
-        reply_text = handle_sell_command(sender_jid, sell_match.group(1).strip(), media_url)
-    elif edit_match:
-        reply_text = handle_edit_command(sender_jid, int(edit_match.group(1)), edit_match.group(2))
-    elif media_url and listing_ref_match:
-        reply_text = handle_pending_image_followup(
-            sender_jid, message, media_url, int(listing_ref_match.group(1))
-        )
-    elif listing_ref_match:
-        reply_text = handle_buyer_inquiry(sender_jid, message, int(listing_ref_match.group(1)))
-    else:
-        reply_text = (
-            "Hi! To list an item, text SELL to get started.\n"
-            "To ask about something on the site, mention its # number.\n"
-            "Text HELP any time for more."
-        )
+        if add_admin_match:
+            reply_text = handle_add_admin_command(sender_jid, add_admin_match.group(1), add_admin_match.group(2))
+        elif remove_admin_match:
+            reply_text = handle_remove_admin_command(sender_jid, remove_admin_match.group(1))
+        elif ADMINS_RE.match(message):
+            reply_text = handle_list_admins_command(sender_jid)
+        elif approve_edit_match:
+            reply_text = handle_approve_edit_command(sender_jid, int(approve_edit_match.group(1)))
+        elif reject_edit_match:
+            reply_text = handle_reject_edit_command(sender_jid, int(reject_edit_match.group(1)))
+        elif remove_match:
+            reply_text = handle_remove_command(sender_jid, int(remove_match.group(1)))
+        elif approve_seller_match:
+            reply_text = handle_approve_seller_command(sender_jid, approve_seller_match.group(1))
+        elif reject_seller_match:
+            reply_text = handle_reject_seller_command(sender_jid, reject_seller_match.group(1))
+        elif APPLICATIONS_RE.match(message):
+            reply_text = handle_applications_command(sender_jid)
+        elif HELP_RE.match(message):
+            reply_text = HELP_TEXT
+        elif seller_for_application and seller_for_application["application_status"] in ("awaiting_form", "rejected"):
+            reply_text = handle_application_submission(sender_jid, message)
+        elif sell_match:
+            reply_text = handle_sell_command(sender_jid, sell_match.group(1).strip(), media_url)
+        elif edit_match:
+            reply_text = handle_edit_command(sender_jid, int(edit_match.group(1)), edit_match.group(2))
+        elif media_url and listing_ref_match:
+            reply_text = handle_pending_image_followup(
+                sender_jid, message, media_url, int(listing_ref_match.group(1))
+            )
+        elif listing_ref_match:
+            reply_text = handle_buyer_inquiry(sender_jid, message, int(listing_ref_match.group(1)))
+        else:
+            reply_text = (
+                "Hi! To list an item, text SELL to get started.\n"
+                "To ask about something on the site, mention its # number.\n"
+                "Text HELP any time for more."
+            )
 
-    send_whatsapp_message(sender_jid, reply_text)
-    return {"status": "ok"}
+        send_whatsapp_message(sender_jid, reply_text)
+        return {"status": "ok"}
+
+    except Exception:
+        print("[webhook] UNHANDLED ERROR while processing message:")
+        print(traceback.format_exc())
+        return {"status": "error"}
 
 
 @app.get("/health")
