@@ -171,10 +171,28 @@ def get_incoming_text(payload: dict) -> str:
 
 
 def get_incoming_sender(payload: dict) -> str:
-    """Returns the WhatsApp JID (e.g. '628123456789@s.whatsapp.net'), which
-    doubles as the chat_id GOWA expects when we send a reply."""
+    """Returns the sender's WhatsApp JID (e.g. '628123456789@s.whatsapp.net').
+
+    Deliberately reads "from", not "chat_id" -- chat_id can be a privacy-
+    preserving "@lid" identifier rather than the real phone number, while
+    "from" reliably holds the actual phone-number JID in direct chats.
+    """
     message = payload.get("payload", {})
-    return (message.get("chat_id") or message.get("from") or "").strip()
+    return (message.get("from") or "").strip()
+
+
+def is_relevant_direct_message(payload: dict) -> bool:
+    """True only for a genuine incoming 1:1 message -- not a group message,
+    not a status/broadcast, not a delivery/read receipt, and not a message
+    the connected account sent itself. The connected WhatsApp number will
+    typically also be used for the middleman's own personal chats and
+    groups (unless a dedicated number is used), and none of that traffic
+    should be treated as a command."""
+    message = payload.get("payload", {})
+    if message.get("is_from_me"):
+        return False
+    chat_id = message.get("chat_id", "")
+    return chat_id.endswith("@s.whatsapp.net")
 
 
 def get_incoming_media_url(payload: dict) -> str | None:
@@ -615,6 +633,11 @@ async def webhook(request: Request):
     try:
         if payload.get("event") not in (None, "message"):
             # Ignore non-message events (delivery receipts, presence, etc.)
+            return {"status": "ignored"}
+
+        if not is_relevant_direct_message(payload):
+            # Group messages, status broadcasts, and the connected account's
+            # own outgoing messages should never be treated as commands.
             return {"status": "ignored"}
 
         sender_jid = get_incoming_sender(payload)
